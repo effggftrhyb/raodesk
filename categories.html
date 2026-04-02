@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Категории — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 class="page-title">Категории заявок</h1>
+            <p class="page-subtitle">Мониторинг работ по категориям и типам обращений</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Categories Grid -->
+      <div class="grid-3" id="categoryGrid"></div>
+      
+      <!-- Category Details -->
+      <div style="margin-top:32px;">
+        <div id="selectedCategory" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <h2 style="font-size:1.125rem;font-weight:600;" id="categoryTitle">Заявки категории</h2>
+            <div style="display:flex;gap:8px;">
+              <span class="badge badge-neutral" id="categoryTotal">0 всего</span>
+              <span class="badge badge-primary" id="categoryInProgress">0 в работе</span>
+            </div>
+          </div>
+          <div id="categoryTickets"></div>
+        </div>
+        
+        <div id="noCategory" class="empty-state">
+          <div class="empty-state-icon">
+            <i data-lucide="grid-3x3" style="width:32px;height:32px;"></i>
+          </div>
+          <h3 class="empty-state-title">Выберите категорию</h3>
+          <p class="empty-state-text">Нажмите на карточку категории выше, чтобы увидеть все заявки в этой категории</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Render header
+    document.getElementById('header').innerHTML = RAODESK.render.header('categories');
+    initIcons();
+    
+    // Get data
+    const tickets = RAODESK.store.tickets;
+    const categories = RAODESK.store.categories;
+    
+    // Render category cards
+    const categoryStats = RAODESK.helpers.getAllCategoryStats();
+    const categoryGrid = document.getElementById('categoryGrid');
+    
+    categoryGrid.innerHTML = categories.map(cat => `
+      <div class="category-card" onclick="showCategory('${cat.id}', '${cat.name}')">
+        <div class="category-header">
+          <div class="category-icon ${cat.color}">
+            <i data-lucide="${cat.icon}" style="width:24px;height:24px;"></i>
+          </div>
+          <span class="badge badge-primary">${categoryStats[cat.id].total}</span>
+        </div>
+        <h3 class="category-title">${RAODESK.helpers.escapeHtml(cat.name)}</h3>
+        <p class="category-count">${RAODESK.helpers.escapeHtml(cat.description)}</p>
+        <div class="category-stats">
+          <div class="category-stat">
+            <div class="category-stat-value" style="color:var(--primary-600);">${categoryStats[cat.id].inProgress}</div>
+            <div class="category-stat-label">В работе</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value" style="color:var(--danger-600);">${categoryStats[cat.id].critical}</div>
+            <div class="category-stat-label">Критично</div>
+          </div>
+          <div class="category-stat">
+            <div class="category-stat-value" style="color:var(--success-600);">${categoryStats[cat.id].closed}</div>
+            <div class="category-stat-label">Закрыто</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    // Show category function
+    function showCategory(catId, catName) {
+      const catTickets = RAODESK.helpers.getTicketsByCategory(catName);
+      const stats = RAODESK.helpers.getCategoryStats(catName);
+      
+      document.getElementById('noCategory').style.display = 'none';
+      document.getElementById('selectedCategory').style.display = 'block';
+      
+      document.getElementById('categoryTitle').textContent = catName;
+      document.getElementById('categoryTotal').textContent = stats.total + ' всего';
+      document.getElementById('categoryInProgress').textContent = stats.inProgress + ' в работе';
+      
+      const ticketsEl = document.getElementById('categoryTickets');
+      if (catTickets.length === 0) {
+        ticketsEl.innerHTML = `
+          <div class="empty-state" style="padding:40px;">
+            <p class="empty-state-text">В этой категории пока нет заявок</p>
+          </div>
+        `;
+      } else {
+        ticketsEl.innerHTML = `
+          <div class="grid-2">
+            ${catTickets.map(ticket => RAODESK.render.ticketCard(ticket)).join('')}
+          </div>
+        `;
+      }
+      
+      lucide.createIcons();
+    }
+    
+    // Check for category param in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      const cat = categories.find(c => c.name === categoryParam || c.id === categoryParam);
+      if (cat) {
+        showCategory(cat.id, cat.name);
+      }
+    }
+    
+    // Init icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

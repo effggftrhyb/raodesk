@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новая статья — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .editor-toolbar {
+      display: flex;
+      gap: var(--space-2);
+      padding: var(--space-2);
+      background: var(--gray-50);
+      border: 1px solid var(--border-light);
+      border-bottom: none;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+    .editor-toolbar button {
+      padding: var(--space-2) var(--space-3);
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .editor-toolbar button:hover {
+      background: var(--gray-100);
+    }
+    .editor-textarea {
+      font-family: var(--font-mono);
+      min-height: 400px;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      line-height: 1.6;
+    }
+    .access-options {
+      display: flex;
+      gap: var(--space-4);
+      margin-top: var(--space-2);
+    }
+    .access-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex: 1;
+    }
+    .access-option:hover {
+      border-color: var(--primary-300);
+    }
+    .access-option.selected {
+      border-color: var(--primary-500);
+      background: var(--primary-50);
+    }
+    .access-option-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      background: var(--gray-100);
+    }
+    .access-option.selected .access-option-icon {
+      background: var(--primary-100);
+      color: var(--primary-600);
+    }
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 class="page-title">Новая статья</h1>
+            <p class="page-subtitle">Создание статьи в базе знаний</p>
+          </div>
+          <div class="page-actions">
+            <a href="knowledge.html" class="btn btn-secondary">
+              <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+              <span>Назад</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <form id="articleForm" class="card">
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Заголовок *</label>
+            <input type="text" id="title" class="form-input" placeholder="Например: Обработка аварийной протечки" required>
+          </div>
+          
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Категория *</label>
+              <select id="category" class="form-select" required>
+                <option value="">Выберите категорию</option>
+                <option value="Аварии">Аварии</option>
+                <option value="Электрика">Электрика</option>
+                <option value="Лифты">Лифты</option>
+                <option value="Сантехника">Сантехника</option>
+                <option value="Кровля">Кровля</option>
+                <option value="Клининг">Клининг</option>
+                <option value="Шаблоны">Шаблоны</option>
+                <option value="FAQ">FAQ</option>
+                <option value="Другое">Другое</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Теги (через запятую)</label>
+              <input type="text" id="tags" class="form-input" placeholder="SLA, эскалация, протечка">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Доступ</label>
+            <div class="access-options">
+              <div class="access-option selected" data-visibility="public" onclick="selectAccess(this)">
+                <div class="access-option-icon">
+                  <i data-lucide="globe" style="width:20px;height:20px;"></i>
+                </div>
+                <div>
+                  <div style="font-weight:600;">Публичный</div>
+                  <div style="font-size:0.875rem;color:var(--text-tertiary);">Виден всем сотрудникам</div>
+                </div>
+              </div>
+              <div class="access-option" data-visibility="internal" onclick="selectAccess(this)">
+                <div class="access-option-icon">
+                  <i data-lucide="lock" style="width:20px;height:20px;"></i>
+                </div>
+                <div>
+                  <div style="font-weight:600;">Внутренний</div>
+                  <div style="font-size:0.875rem;color:var(--text-tertiary);">Только для диспетчеров</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Содержание (Markdown) *</label>
+            <div class="editor-toolbar">
+              <button type="button" onclick="insertMarkdown('## ')">H2</button>
+              <button type="button" onclick="insertMarkdown('### ')">H3</button>
+              <button type="button" onclick="insertMarkdown('**', '**')"><b>B</b></button>
+              <button type="button" onclick="insertMarkdown('*', '*')"><i>I</i></button>
+              <button type="button" onclick="insertMarkdown('- ')">•</button>
+              <button type="button" onclick="insertMarkdown('1. ')">1.</button>
+              <button type="button" onclick="insertMarkdown('[ ] ')">☐</button>
+              <button type="button" onclick="insertMarkdown('> ')">"</button>
+              <button type="button" onclick="insertMarkdown('```\n', '\n```')">&lt;/&gt;</button>
+            </div>
+            <textarea id="content" class="form-input editor-textarea" placeholder="Введите содержание статьи...
+
+Поддерживается Markdown:
+## Заголовок
+- список
+**жирный текст**
+`код`" required></textarea>
+          </div>
+          
+          <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-4);">
+            <a href="knowledge.html" class="btn btn-secondary">Отмена</a>
+            <button type="submit" class="btn btn-primary">
+              <i data-lucide="save" style="width:18px;height:18px;"></i>
+              <span>Создать статью</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    if (!RAODESK.auth.checkAuth()) window.location.href = 'index.html';
+    document.getElementById('header').innerHTML = RAODESK.render.header('knowledge');
+    initIcons();
+    
+    let selectedVisibility = 'public';
+    
+    function selectAccess(element) {
+      document.querySelectorAll('.access-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedVisibility = element.dataset.visibility;
+    }
+    
+    function insertMarkdown(before, after = '') {
+      const textarea = document.getElementById('content');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selection = text.substring(start, end);
+      
+      textarea.value = text.substring(0, start) + before + selection + after + text.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selection.length);
+    }
+    
+    document.getElementById('articleForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const tags = document.getElementById('tags').value
+        .split(',')
+        .map(t => t.trim())
+        .filter(t => t);
+      
+      const articleData = {
+        title: document.getElementById('title').value,
+        category: document.getElementById('category').value,
+        content: document.getElementById('content').value,
+        tags: tags,
+        visibility: selectedVisibility,
+        allowedRoles: selectedVisibility === 'internal' 
+          ? ['Главный администратор', 'Диспетчер / оператор', 'Специалист участка'] 
+          : null
+      };
+      
+      const newArticle = RAODESK.articles.create(articleData);
+      window.location.href = `article.html?id=${newArticle.id}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявки — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 class="page-title">Заявки</h1>
+            <p class="page-subtitle">Управление обращениями и инцидентами</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-primary" onclick="showCreateModal()">
+              <i data-lucide="plus" style="width:18px;height:18px;"></i>
+              <span>Новая заявка</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <span class="filter-label">Статус:</span>
+          <select class="form-select" id="filterStatus" style="width:auto;min-width:140px;">
+            <option value="">Все статусы</option>
+            <option value="Новая">Новая</option>
+            <option value="Назначена">Назначена</option>
+            <option value="В работе">В работе</option>
+            <option value="На уточнении">На уточнении</option>
+            <option value="На контроле">На контроле</option>
+            <option value="Закрыта">Закрыта</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Приоритет:</span>
+          <select class="form-select" id="filterPriority" style="width:auto;min-width:140px;">
+            <option value="">Все приоритеты</option>
+            <option value="Критический">Критический</option>
+            <option value="Высокий">Высокий</option>
+            <option value="Средний">Средний</option>
+            <option value="Низкий">Низкий</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Категория:</span>
+          <select class="form-select" id="filterCategory" style="width:auto;min-width:160px;">
+            <option value="">Все категории</option>
+          </select>
+        </div>
+        <div class="filter-group" style="margin-left:auto;">
+          <span class="filter-label" id="filteredCount"></span>
+        </div>
+      </div>
+      
+      <!-- Tickets Grid -->
+      <div class="grid-2" id="ticketsGrid"></div>
+      
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <div class="empty-state-icon">
+          <i data-lucide="inbox" style="width:32px;height:32px;"></i>
+        </div>
+        <h3 class="empty-state-title">Заявки не найдены</h3>
+        <p class="empty-state-text">Попробуйте изменить параметры фильтрации или создайте новую заявку</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Render header
+    document.getElementById('header').innerHTML = RAODESK.render.header('tickets');
+    initIcons();
+    
+    // Get data
+    let tickets = [...RAODESK.store.tickets];
+    const categories = RAODESK.store.categories;
+    
+    // Populate category filter
+    const categorySelect = document.getElementById('filterCategory');
+    categories.forEach(cat => {
+      const option = document.createElement('option');
+      option.value = cat.name;
+      option.textContent = cat.name;
+      categorySelect.appendChild(option);
+    });
+    
+    // Check for category param in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      categorySelect.value = categoryParam;
+    }
+    
+    // Filter tickets
+    function filterTickets() {
+      const status = document.getElementById('filterStatus').value;
+      const priority = document.getElementById('filterPriority').value;
+      const category = document.getElementById('filterCategory').value;
+      
+      let filtered = tickets.filter(t => {
+        if (status && t.status !== status) return false;
+        if (priority && t.priority !== priority) return false;
+        if (category && t.category !== category) return false;
+        return true;
+      });
+      
+      renderTickets(filtered);
+    }
+    
+    // Render tickets
+    function renderTickets(ticketsToRender) {
+      const grid = document.getElementById('ticketsGrid');
+      const emptyState = document.getElementById('emptyState');
+      const countLabel = document.getElementById('filteredCount');
+      
+      countLabel.textContent = `Показано ${ticketsToRender.length} из ${tickets.length}`;
+      
+      if (ticketsToRender.length === 0) {
+        grid.innerHTML = '';
+        emptyState.style.display = 'block';
+      } else {
+        emptyState.style.display = 'none';
+        grid.innerHTML = ticketsToRender.map(ticket => RAODESK.render.ticketCard(ticket)).join('');
+        lucide.createIcons();
+      }
+    }
+    
+    // Event listeners
+    document.getElementById('filterStatus').addEventListener('change', filterTickets);
+    document.getElementById('filterPriority').addEventListener('change', filterTickets);
+    document.getElementById('filterCategory').addEventListener('change', filterTickets);
+    
+    // Initial render
+    if (categoryParam) {
+      filterTickets();
+    } else {
+      renderTickets(tickets);
+    }
+    
+    // Show create modal placeholder
+    function showCreateModal() {
+      alert('Функция создания новой заявки будет здесь');
+    }
+    
+    // Init icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обзор — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 class="page-title">Операционный обзор</h1>
+            <p class="page-subtitle">Ключевые показатели и текущая ситуация</p>
+          </div>
+          <div class="page-actions">
+            <a href="tickets.html" class="btn btn-primary">
+              <i data-lucide="plus" style="width:18px;height:18px;"></i>
+              <span>Новая заявка</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Всего заявок</div>
+          <div class="stat-value" id="totalTickets">0</div>
+          <div class="stat-change">
+            <i data-lucide="trending-up" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i>
+            <span>+12% к прошлой неделе</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">В работе</div>
+          <div class="stat-value" id="inProgressTickets" style="color:var(--primary-600);">0</div>
+          <div class="stat-change">
+            <span>Требуют внимания</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Критические</div>
+          <div class="stat-value" id="criticalTickets" style="color:var(--danger-600);">0</div>
+          <div class="stat-change negative">
+            <i data-lucide="alert-triangle" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i>
+            <span>Срочно</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Закрыто сегодня</div>
+          <div class="stat-value" id="closedTickets" style="color:var(--success-600);">0</div>
+          <div class="stat-change">
+            <i data-lucide="check-circle" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i>
+            <span>SLA 92%</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Categories Grid -->
+      <h2 style="font-size:1.125rem;font-weight:600;margin-bottom:16px;">Мониторинг по категориям</h2>
+      <div class="grid-3" id="categoryGrid"></div>
+      
+      <!-- Recent Tickets -->
+      <div style="margin-top:32px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h2 style="font-size:1.125rem;font-weight:600;">Последние заявки</h2>
+          <a href="tickets.html" class="btn btn-ghost btn-sm">
+            <span>Все заявки</span>
+            <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+          </a>
+        </div>
+        <div class="list-group" id="recentTickets"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Render header
+    document.getElementById('header').innerHTML = RAODESK.render.header('dashboard');
+    initIcons();
+    
+    // Get data
+    const tickets = RAODESK.store.tickets;
+    const categories = RAODESK.store.categories;
+    
+    // Update stats
+    document.getElementById('totalTickets').textContent = tickets.length;
+    document.getElementById('inProgressTickets').textContent = tickets.filter(t => t.status === 'В работе').length;
+    document.getElementById('criticalTickets').textContent = tickets.filter(t => t.priority === 'Критический').length;
+    document.getElementById('closedTickets').textContent = tickets.filter(t => t.status === 'Закрыта').length;
+    
+    // Render category cards
+    const categoryStats = RAODESK.helpers.getAllCategoryStats();
+    const categoryGrid = document.getElementById('categoryGrid');
+    categoryGrid.innerHTML = categories.map(cat => 
+      RAODESK.render.categoryCard(cat, categoryStats[cat.id])
+    ).join('');
+    
+    // Render recent tickets (last 5)
+    const recentTickets = tickets.slice(0, 5);
+    const recentTicketsEl = document.getElementById('recentTickets');
+    recentTicketsEl.innerHTML = recentTickets.map(ticket => `
+      <a href="ticket.html?id=${ticket.id}" class="list-item" style="text-decoration:none;">
+        <div class="list-item-icon">
+          <i data-lucide="ticket" style="width:20px;height:20px;"></i>
+        </div>
+        <div class="list-item-content">
+          <div class="list-item-title">${RAODESK.helpers.escapeHtml(ticket.title)}</div>
+          <div class="list-item-subtitle">${RAODESK.helpers.escapeHtml(ticket.id)} • ${RAODESK.helpers.escapeHtml(ticket.category)} • ${RAODESK.helpers.escapeHtml(ticket.requester)}</div>
+        </div>
+        <span class="badge ${RAODESK.helpers.getBadgeClass(ticket.status)}">
+          <span class="status-dot ${RAODESK.helpers.getStatusDot(ticket.status)}"></span>
+          ${RAODESK.helpers.escapeHtml(ticket.status)}
+        </span>
+      </a>
+    `).join('');
+    
+    // Init icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

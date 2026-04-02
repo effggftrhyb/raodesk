@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+      padding: var(--space-4);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-8);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+    .auth-logo-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      border-radius: var(--radius-xl);
+      display: grid;
+      place-items: center;
+      margin: 0 auto var(--space-4);
+      color: white;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .auth-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: var(--space-2);
+    }
+    .auth-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-5);
+      font-size: 0.875rem;
+    }
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .forgot-password {
+      color: var(--primary-600);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-light);
+    }
+    .auth-footer a {
+      color: var(--primary-600);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .alert {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      font-size: 0.875rem;
+    }
+    .alert-danger {
+      background: var(--danger-50);
+      border: 1px solid var(--danger-200);
+      color: var(--danger-700);
+    }
+    .alert-success {
+      background: var(--success-50);
+      border: 1px solid var(--success-200);
+      color: var(--success-700);
+    }
+    .hidden { display: none; }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: var(--space-5) 0;
+      color: var(--text-tertiary);
+      font-size: 0.875rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+    .quick-login {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2);
+    }
+    .quick-login-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-3);
+      background: var(--gray-50);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .quick-login-btn:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-300);
+    }
+    .quick-login-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    }
+    .quick-login-name {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">R</div>
+      <h1 class="auth-title">Добро пожаловать</h1>
+      <p class="auth-subtitle">Войдите в систему RAODESK</p>
+    </div>
+
+    <div id="errorMessage" class="alert alert-danger hidden" style="margin-bottom:var(--space-4);"></div>
+    <div id="successMessage" class="alert alert-success hidden" style="margin-bottom:var(--space-4);"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div style="position:relative;">
+          <i data-lucide="mail" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--text-tertiary);"></i>
+          <input type="email" id="email" class="form-input" placeholder="your@email.com" style="padding-left:44px;" required autofocus>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Пароль</label>
+        <div style="position:relative;">
+          <i data-lucide="lock" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--text-tertiary);"></i>
+          <input type="password" id="password" class="form-input" placeholder="Введите пароль" style="padding-left:44px;" required>
+          <button type="button" onclick="togglePassword()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--text-tertiary);">
+            <i data-lucide="eye" style="width:20px;height:20px;" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="remember-me">
+          <input type="checkbox" id="rememberMe" checked>
+          <span>Запомнить меня</span>
+        </label>
+        <a href="#" class="forgot-password">Забыли пароль?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full">
+        <i data-lucide="log-in" style="width:20px;height:20px;"></i>
+        <span>Войти</span>
+      </button>
+    </form>
+
+    <div class="divider">или</div>
+
+    <div class="quick-login">
+      <button class="quick-login-btn" onclick="quickLogin('admin')" title="admin@raodesk.demo / Admin123!">
+        <div class="quick-login-avatar">АВ</div>
+        <span class="quick-login-name">Админ</span>
+      </button>
+      <button class="quick-login-btn" onclick="quickLogin('dispatcher')" title="dispatcher@raodesk.demo / Dispatch123!">
+        <div class="quick-login-avatar">ОР</div>
+        <span class="quick-login-name">Диспетчер</span>
+      </button>
+      <button class="quick-login-btn" onclick="quickLogin('specialist')" title="specialist@raodesk.demo / Special123!">
+        <div class="quick-login-avatar">ИП</div>
+        <span class="quick-login-name">Специалист</span>
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      <p>Ещё нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if (RAODESK.store.currentUser) window.location.href = 'dashboard.html';
+    lucide.createIcons();
+
+    function togglePassword() {
+      const input = document.getElementById('password');
+      const icon = document.getElementById('eyeIcon');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      icon.setAttribute('data-lucide', input.type === 'password' ? 'eye' : 'eye-off');
+      lucide.createIcons();
+    }
+
+    const demoAccounts = {
+      admin: { email: 'admin@raodesk.demo', password: 'Admin123!' },
+      dispatcher: { email: 'dispatcher@raodesk.demo', password: 'Dispatch123!' },
+      specialist: { email: 'specialist@raodesk.demo', password: 'Special123!' }
+    };
+
+    function quickLogin(role) {
+      const creds = demoAccounts[role];
+      document.getElementById('email').value = creds.email;
+      document.getElementById('password').value = creds.password;
+      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+      const errorDiv = document.getElementById('errorMessage');
+      const successDiv = document.getElementById('successMessage');
+      
+      errorDiv.classList.add('hidden');
+      successDiv.classList.add('hidden');
+      
+      const result = RAODESK.auth.login(email, password, rememberMe);
+      
+      if (result.success) {
+        successDiv.textContent = 'Вход выполнен успешно!';
+        successDiv.classList.remove('hidden');
+        setTimeout(() => window.location.href = 'dashboard.html', 500);
+      } else {
+        errorDiv.textContent = result.error || 'Неверный email или пароль';
+        errorDiv.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

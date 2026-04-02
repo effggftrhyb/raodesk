@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Статья — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .article-header {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+    .article-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-3);
+    }
+    .article-breadcrumbs a {
+      color: var(--text-tertiary);
+    }
+    .article-breadcrumbs a:hover {
+      color: var(--primary-600);
+    }
+    .article-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: var(--space-3);
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+    }
+    .article-meta-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .article-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--border-light);
+    }
+    .article-content {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+    .article-content h2 {
+      font-size: 1.5rem;
+      margin-top: var(--space-6);
+      margin-bottom: var(--space-3);
+    }
+    .article-content h3 {
+      font-size: 1.25rem;
+      margin-top: var(--space-5);
+      margin-bottom: var(--space-3);
+    }
+    .article-content p {
+      margin-bottom: var(--space-3);
+      line-height: 1.7;
+    }
+    .article-content ul, .article-content ol {
+      margin-bottom: var(--space-3);
+      padding-left: var(--space-5);
+    }
+    .article-content li {
+      margin-bottom: var(--space-2);
+    }
+    .article-content code {
+      background: var(--gray-100);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+    }
+    .article-content pre {
+      background: var(--gray-900);
+      color: var(--gray-50);
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      margin-bottom: var(--space-4);
+    }
+    .article-content blockquote {
+      border-left: 4px solid var(--primary-500);
+      padding-left: var(--space-4);
+      margin-left: 0;
+      color: var(--text-secondary);
+    }
+    .article-content input[type="checkbox"] {
+      margin-right: var(--space-2);
+    }
+    .edit-form {
+      display: none;
+    }
+    .edit-form.active {
+      display: block;
+    }
+    .view-mode {
+      display: block;
+    }
+    .view-mode.hidden {
+      display: none;
+    }
+    .editor-toolbar {
+      display: flex;
+      gap: var(--space-2);
+      padding: var(--space-2);
+      background: var(--gray-50);
+      border: 1px solid var(--border-light);
+      border-bottom: none;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+    .editor-toolbar button {
+      padding: var(--space-2);
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .editor-toolbar button:hover {
+      background: var(--gray-100);
+    }
+    .editor-textarea {
+      font-family: var(--font-mono);
+      min-height: 400px;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+    }
+    .comments-section {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+    }
+    .comment-item {
+      display: flex;
+      gap: var(--space-3);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+    .comment-content {
+      flex: 1;
+    }
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
+    }
+    .comment-author {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .comment-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .comment-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .access-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      background: var(--warning-100);
+      color: var(--warning-700);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .version-info {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--gray-100);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <!-- Access Denied Message -->
+      <div id="accessDenied" class="empty-state" style="display:none;">
+        <div class="empty-state-icon">
+          <i data-lucide="lock" style="width:48px;height:48px;"></i>
+        </div>
+        <h3 class="empty-state-title">Доступ ограничен</h3>
+        <p class="empty-state-text">У вас нет прав для просмотра этой статьи</p>
+        <a href="knowledge.html" class="btn btn-primary" style="margin-top:var(--space-4);">
+          <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+          <span>Вернуться в базу знаний</span>
+        </a>
+      </div>
+
+      <!-- Article Content -->
+      <div id="articleContent">
+        <!-- View Mode -->
+        <div class="view-mode" id="viewMode">
+          <div class="article-header">
+            <div class="article-breadcrumbs">
+              <a href="knowledge.html">База знаний</a>
+              <i data-lucide="chevron-right" style="width:16px;height:16px;"></i>
+              <span id="articleCategory">Категория</span>
+            </div>
+            <h1 class="article-title" id="articleTitle"></h1>
+            <div class="article-meta">
+              <div class="article-meta-item">
+                <i data-lucide="user" style="width:16px;height:16px;"></i>
+                <span id="articleAuthor"></span>
+              </div>
+              <div class="article-meta-item">
+                <i data-lucide="calendar" style="width:16px;height:16px;"></i>
+                <span>Создано: <span id="articleCreated"></span></span>
+              </div>
+              <div class="article-meta-item">
+                <i data-lucide="clock" style="width:16px;height:16px;"></i>
+                <span>Обновлено: <span id="articleUpdated"></span></span>
+              </div>
+              <span class="access-badge" id="accessBadge">
+                <i data-lucide="eye" style="width:12px;height:12px;"></i>
+                <span id="accessText"></span>
+              </span>
+              <span class="version-info">Версия <span id="articleVersion"></span></span>
+            </div>
+            <div class="article-actions" id="articleActions">
+              <button class="btn btn-primary" onclick="enableEdit()">
+                <i data-lucide="edit-2" style="width:18px;height:18px;"></i>
+                <span>Редактировать</span>
+              </button>
+              <button class="btn btn-secondary" onclick="deleteArticle()">
+                <i data-lucide="trash-2" style="width:18px;height:18px;"></i>
+                <span>Удалить</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="article-content" id="articleBody"></div>
+        </div>
+
+        <!-- Edit Mode -->
+        <div class="edit-form" id="editMode">
+          <div class="article-header">
+            <div class="form-group">
+              <label class="form-label">Заголовок</label>
+              <input type="text" id="editTitle" class="form-input">
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">Категория</label>
+                <select id="editCategory" class="form-select">
+                  <option value="Аварии">Аварии</option>
+                  <option value="Электрика">Электрика</option>
+                  <option value="Лифты">Лифты</option>
+                  <option value="Сантехника">Сантехника</option>
+                  <option value="Кровля">Кровля</option>
+                  <option value="Клининг">Клининг</option>
+                  <option value="Шаблоны">Шаблоны</option>
+                  <option value="FAQ">FAQ</option>
+                  <option value="Другое">Другое</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Доступ</label>
+                <select id="editVisibility" class="form-select">
+                  <option value="public">Публичный</option>
+                  <option value="internal">Внутренний</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Теги (через запятую)</label>
+              <input type="text" id="editTags" class="form-input" placeholder="SLA, эскалация, протечка">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Содержание (Markdown)</label>
+            <div class="editor-toolbar">
+              <button type="button" onclick="insertMarkdown('## ')" title="Заголовок">H2</button>
+              <button type="button" onclick="insertMarkdown('### ')" title="Подзаголовок">H3</button>
+              <button type="button" onclick="insertMarkdown('**', '**')" title="Жирный"><b>B</b></button>
+              <button type="button" onclick="insertMarkdown('*', '*')" title="Курсив"><i>I</i></button>
+              <button type="button" onclick="insertMarkdown('- ')">•</button>
+              <button type="button" onclick="insertMarkdown('1. ')">1.</button>
+              <button type="button" onclick="insertMarkdown('> ')" title="Цитата">"</button>
+              <button type="button" onclick="insertMarkdown('```\n', '\n```')" title="Код">&lt;/&gt;</button>
+            </div>
+            <textarea id="editContent" class="form-input editor-textarea" rows="15"></textarea>
+          </div>
+          
+          <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-4);">
+            <button class="btn btn-secondary" onclick="cancelEdit()">Отмена</button>
+            <button class="btn btn-primary" onclick="saveArticle()">
+              <i data-lucide="save" style="width:18px;height:18px;"></i>
+              <span>Сохранить изменения</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Comments -->
+        <div class="comments-section" id="commentsSection">
+          <h3 style="font-size:1.125rem;font-weight:600;margin-bottom:var(--space-4);">
+            <i data-lucide="message-square" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+            Комментарии
+          </h3>
+          <div id="commentsList"></div>
+          
+          <div style="margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--border-light);">
+            <h4 style="font-size:0.9375rem;font-weight:600;margin-bottom:var(--space-3);">Добавить комментарий</h4>
+            <div class="form-group">
+              <textarea id="commentText" class="form-textarea" rows="3" placeholder="Ваш комментарий к статье..."></textarea>
+            </div>
+            <div style="display:flex;justify-content:flex-end;">
+              <button class="btn btn-primary" onclick="addComment()">
+                <i data-lucide="send" style="width:18px;height:18px;"></i>
+                <span>Отправить</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Get article ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+    
+    if (!articleId) {
+      window.location.href = 'knowledge.html';
+    }
+    
+    // Get article data
+    let article = RAODESK.articles.getById(articleId);
+    
+    if (!article) {
+      alert('Статья не найдена');
+      window.location.href = 'knowledge.html';
+    }
+    
+    // Check access
+    const currentUser = RAODESK.auth.getCurrentUser();
+    const hasAccess = RAODESK.articles.canAccess(article);
+    
+    if (!hasAccess) {
+      document.getElementById('accessDenied').style.display = 'block';
+      document.getElementById('articleContent').style.display = 'none';
+      document.getElementById('header').innerHTML = RAODESK.render.header('knowledge');
+      initIcons();
+    } else {
+      // Render header
+      document.getElementById('header').innerHTML = RAODESK.render.header('knowledge');
+      initIcons();
+      
+      // Render article
+      renderArticle();
+      renderComments();
+    }
+    
+    function renderArticle() {
+      document.getElementById('articleTitle').textContent = article.title;
+      document.getElementById('articleCategory').textContent = article.category;
+      document.getElementById('articleAuthor').textContent = article.author;
+      document.getElementById('articleCreated').textContent = article.createdAt;
+      document.getElementById('articleUpdated').textContent = article.updatedAt;
+      document.getElementById('articleVersion').textContent = article.version;
+      
+      // Access badge
+      const accessBadge = document.getElementById('accessBadge');
+      const accessText = document.getElementById('accessText');
+      if (article.visibility === 'internal') {
+        accessText.textContent = article.allowedRoles ? article.allowedRoles.join(', ') : 'Внутренний';
+        accessBadge.style.background = 'var(--warning-100)';
+        accessBadge.style.color = 'var(--warning-700)';
+      } else {
+        accessText.textContent = 'Публичный';
+        accessBadge.style.background = 'var(--success-100)';
+        accessBadge.style.color = 'var(--success-700)';
+      }
+      
+      // Parse markdown content
+      document.getElementById('articleBody').innerHTML = parseMarkdown(article.content);
+      
+      // Show/hide edit button based on permissions
+      const canEdit = currentUser.role === 'Главный администратор' || currentUser.name === article.author;
+      document.getElementById('articleActions').style.display = canEdit ? 'flex' : 'none';
+    }
+    
+    function parseMarkdown(text) {
+      if (!text) return '';
+      
+      // Escape HTML
+      let html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      
+      // Headers
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+      
+      // Bold
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      
+      // Italic
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      
+      // Code blocks
+      html = html.replace(/```\n?([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+      
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+      
+      // Blockquotes
+      html = html.replace(/^&gt; (.*$)/gim, '<blockquote>$1</blockquote>');
+      
+      // Checkboxes
+      html = html.replace(/\[ \]/g, '<input type="checkbox" disabled>');
+      html = html.replace(/\[x\]/gi, '<input type="checkbox" checked disabled>');
+      
+      // Lists
+      const lines = html.split('\n');
+      let inList = false;
+      let listType = '';
+      const processedLines = [];
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const ulMatch = line.match(/^- (.*)/);
+        const olMatch = line.match(/^\d+\. (.*)/);
+        
+        if (ulMatch) {
+          if (!inList || listType !== 'ul') {
+            if (inList) processedLines.push(`</${listType}>`);
+            processedLines.push('<ul>');
+            inList = true;
+            listType = 'ul';
+          }
+          processedLines.push(`<li>${ulMatch[1]}</li>`);
+        } else if (olMatch) {
+          if (!inList || listType !== 'ol') {
+            if (inList) processedLines.push(`</${listType}>`);
+            processedLines.push('<ol>');
+            inList = true;
+            listType = 'ol';
+          }
+          processedLines.push(`<li>${olMatch[1]}</li>`);
+        } else {
+          if (inList) {
+            processedLines.push(`</${listType}>`);
+            inList = false;
+            listType = '';
+          }
+          processedLines.push(line);
+        }
+      }
+      
+      if (inList) processedLines.push(`</${listType}>`);
+      html = processedLines.join('\n');
+      
+      // Paragraphs
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = '<p>' + html + '</p>';
+      
+      // Clean up empty paragraphs
+      html = html.replace(/<p><\/p>/g, '');
+      html = html.replace(/<p>(<h[123].*?<\/h[123]>)<\/p>/g, '$1');
+      html = html.replace(/<p>(<pre>.*?<\/pre>)<\/p>/gs, '$1');
+      html = html.replace(/<p>(<[ou]l>.*?<\/[ou]l>)<\/p>/gs, '$1');
+      html = html.replace(/<p>(<blockquote>.*?<\/blockquote>)<\/p>/g, '$1');
+      
+      return html;
+    }
+    
+    function renderComments() {
+      const container = document.getElementById('commentsList');
+      if (!article.comments || article.comments.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:var(--space-4);">Пока нет комментариев</p>';
+        return;
+      }
+      
+      container.innerHTML = article.comments.map(comment => `
+        <div class="comment-item">
+          <div class="comment-avatar">${comment.author.substring(0, 2).toUpperCase()}</div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">${RAODESK.helpers.escapeHtml(comment.author)}</span>
+              <span class="comment-time">${RAODESK.helpers.escapeHtml(comment.createdAt)}</span>
+            </div>
+            <p class="comment-text">${RAODESK.helpers.escapeHtml(comment.text)}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function enableEdit() {
+      document.getElementById('viewMode').classList.add('hidden');
+      document.getElementById('editMode').classList.add('active');
+      
+      // Populate form
+      document.getElementById('editTitle').value = article.title;
+      document.getElementById('editCategory').value = article.category;
+      document.getElementById('editVisibility').value = article.visibility;
+      document.getElementById('editTags').value = article.tags ? article.tags.join(', ') : '';
+      document.getElementById('editContent').value = article.content;
+    }
+    
+    function cancelEdit() {
+      document.getElementById('viewMode').classList.remove('hidden');
+      document.getElementById('editMode').classList.remove('active');
+    }
+    
+    function saveArticle() {
+      const tags = document.getElementById('editTags').value
+        .split(',')
+        .map(t => t.trim())
+        .filter(t => t);
+      
+      const visibility = document.getElementById('editVisibility').value;
+      
+      const updates = {
+        title: document.getElementById('editTitle').value,
+        category: document.getElementById('editCategory').value,
+        visibility: visibility,
+        content: document.getElementById('editContent').value,
+        tags: tags
+      };
+      
+      if (visibility === 'internal') {
+        updates.allowedRoles = ['Главный администратор', 'Диспетчер / оператор', 'Специалист участка'];
+      } else {
+        updates.allowedRoles = null;
+      }
+      
+      RAODESK.articles.update(articleId, updates);
+      
+      // Reload article
+      article = RAODESK.articles.getById(articleId);
+      
+      // Switch to view mode
+      cancelEdit();
+      renderArticle();
+      
+      lucide.createIcons();
+    }
+    
+    function deleteArticle() {
+      if (confirm('Удалить эту статью? Это действие нельзя отменить.')) {
+        RAODESK.articles.delete(articleId);
+        window.location.href = 'knowledge.html';
+      }
+    }
+    
+    function addComment() {
+      const text = document.getElementById('commentText').value.trim();
+      if (!text) return;
+      
+      RAODESK.articles.addComment(articleId, {
+        author: currentUser.name,
+        text: text
+      });
+      
+      document.getElementById('commentText').value = '';
+      renderComments();
+    }
+    
+    function insertMarkdown(before, after = '') {
+      const textarea = document.getElementById('editContent');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selection = text.substring(start, end);
+      
+      const newText = text.substring(0, start) + before + selection + after + text.substring(end);
+      textarea.value = newText;
+      
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selection.length);
+    }
+  </script>
+</body>
+</html>

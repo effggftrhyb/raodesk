@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+      padding: var(--space-4);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-8);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+    .auth-logo-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      border-radius: var(--radius-xl);
+      display: grid;
+      place-items: center;
+      margin: 0 auto var(--space-4);
+      color: white;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .auth-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: var(--space-2);
+    }
+    .auth-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+    @media (max-width: 640px) {
+      .form-row-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .password-strength {
+      margin-top: var(--space-2);
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      border-radius: var(--radius-full);
+      transition: all 0.3s ease;
+    }
+    .password-strength-bar.weak { width: 33%; background: var(--danger-500); }
+    .password-strength-bar.medium { width: 66%; background: var(--warning-500); }
+    .password-strength-bar.strong { width: 100%; background: var(--success-500); }
+    .password-strength-text {
+      font-size: 0.75rem;
+      margin-top: var(--space-1);
+      color: var(--text-tertiary);
+    }
+    .terms-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    .terms-checkbox input {
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-600);
+    }
+    .terms-checkbox label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .terms-checkbox a {
+      color: var(--primary-600);
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-light);
+    }
+    .auth-footer a {
+      color: var(--primary-600);
+      font-weight: 500;
+    }
+    .error-message {
+      display: none;
+      background: var(--danger-50);
+      border: 1px solid var(--danger-200);
+      color: var(--danger-700);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-4);
+      font-size: 0.875rem;
+    }
+    .success-message {
+      display: none;
+      background: var(--success-50);
+      border: 1px solid var(--success-200);
+      color: var(--success-700);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-4);
+      font-size: 0.875rem;
+    }
+    .role-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .role-option:hover {
+      border-color: var(--primary-300);
+    }
+    .role-option.selected {
+      border-color: var(--primary-500);
+      background: var(--primary-50);
+    }
+    .role-option-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      background: var(--gray-100);
+    }
+    .role-option.selected .role-option-icon {
+      background: var(--primary-100);
+      color: var(--primary-600);
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">R</div>
+      <h1 class="auth-title">Создать аккаунт</h1>
+      <p class="auth-subtitle">Присоединитесь к RAODESK</p>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+
+    <form id="registerForm">
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Имя</label>
+          <input type="text" id="firstName" class="form-input" placeholder="Иван" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Фамилия</label>
+          <input type="text" id="lastName" class="form-input" placeholder="Петров" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div style="position:relative;">
+          <i data-lucide="mail" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-tertiary);"></i>
+          <input type="email" id="email" class="form-input" placeholder="your@email.com" style="padding-left:44px;" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Должность / Роль</label>
+        <select id="role" class="form-select" required>
+          <option value="">Выберите роль</option>
+          <option value="Диспетчер / оператор">Диспетчер / оператор</option>
+          <option value="Специалист участка">Специалист участка</option>
+          <option value="Главный администратор">Главный администратор</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Участок / Зона</label>
+        <input type="text" id="zone" class="form-input" placeholder="Участок №2, Центральный офис...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Пароль</label>
+        <div style="position:relative;">
+          <i data-lucide="lock" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-tertiary);"></i>
+          <input type="password" id="password" class="form-input" placeholder="Минимум 8 символов" style="padding-left:44px;" required minlength="8">
+          <button type="button" onclick="togglePassword('password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--text-tertiary);">
+            <i data-lucide="eye" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div class="password-strength">
+          <div class="password-strength-bar" id="passwordStrength"></div>
+        </div>
+        <div class="password-strength-text" id="passwordStrengthText"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Подтвердите пароль</label>
+        <div style="position:relative;">
+          <i data-lucide="lock" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-tertiary);"></i>
+          <input type="password" id="confirmPassword" class="form-input" placeholder="Повторите пароль" style="padding-left:44px;" required>
+        </div>
+      </div>
+
+      <div class="terms-checkbox">
+        <input type="checkbox" id="agreeTerms" required>
+        <label for="agreeTerms">
+          Я согласен с <a href="#">Условиями использования</a> и 
+          <a href="#">Политикой конфиденциальности</a>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full" style="margin-top:var(--space-5);">
+        <i data-lucide="user-plus" style="width:20px;height:20px;"></i>
+        <span>Создать аккаунт</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Уже есть аккаунт? <a href="index.html">Войти</a></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    // Check if already logged in
+    if (RAODESK.auth.checkAuth()) {
+      window.location.href = 'dashboard.html';
+    }
+
+    // Password visibility toggle
+    function togglePassword(fieldId, button) {
+      const input = document.getElementById(fieldId);
+      const icon = button.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    // Password strength checker
+    function checkPasswordStrength(password) {
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+      if (password.match(/[0-9]/)) strength++;
+      if (password.match(/[^a-zA-Z0-9]/)) strength++;
+      
+      return strength;
+    }
+
+    document.getElementById('password').addEventListener('input', (e) => {
+      const password = e.target.value;
+      const strength = checkPasswordStrength(password);
+      const bar = document.getElementById('passwordStrength');
+      const text = document.getElementById('passwordStrengthText');
+      
+      bar.className = 'password-strength-bar';
+      
+      if (password.length === 0) {
+        text.textContent = '';
+      } else if (strength <= 1) {
+        bar.classList.add('weak');
+        text.textContent = 'Слабый пароль';
+        text.style.color = 'var(--danger-500)';
+      } else if (strength === 2) {
+        bar.classList.add('medium');
+        text.textContent = 'Средний пароль';
+        text.style.color = 'var(--warning-500)';
+      } else {
+        bar.classList.add('strong');
+        text.textContent = 'Надёжный пароль';
+        text.style.color = 'var(--success-500)';
+      }
+    });
+
+    // Form submission
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const errorDiv = document.getElementById('errorMessage');
+      const successDiv = document.getElementById('successMessage');
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+      
+      // Get form data
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const role = document.getElementById('role').value;
+      const zone = document.getElementById('zone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validation
+      if (!firstName || !lastName) {
+        showError('Введите имя и фамилию');
+        return;
+      }
+      
+      if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        showError('Введите корректный email');
+        return;
+      }
+      
+      if (!role) {
+        showError('Выберите роль');
+        return;
+      }
+      
+      if (password.length < 8) {
+        showError('Пароль должен быть не менее 8 символов');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showError('Пароли не совпадают');
+        return;
+      }
+      
+      // Register user
+      const result = RAODESK.auth.register({
+        name: `${firstName} ${lastName}`,
+        email: email,
+        role: role,
+        zone: zone || 'Центральный офис',
+        password: password,
+        avatar: `${firstName[0]}${lastName[0]}`.toUpperCase()
+      });
+      
+      if (result.success) {
+        showSuccess('Регистрация успешна! Перенаправление...');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+      } else {
+        showError(result.error || 'Ошибка регистрации');
+      }
+    });
+
+    function showError(message) {
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.getElementById('successMessage');
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

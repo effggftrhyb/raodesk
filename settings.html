@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройки — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 class="page-title">Настройки</h1>
+            <p class="page-subtitle">Персонализация и параметры системы</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Settings Grid -->
+      <div class="grid-2">
+        <!-- Theme Settings -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i data-lucide="palette" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+              Оформление
+            </h3>
+          </div>
+          <div class="card-body">
+            <div style="margin-bottom:24px;">
+              <label class="form-label">Тема интерфейса</label>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="theme-option active" data-theme="light" onclick="setTheme('light')">
+                  <div class="theme-preview light"></div>
+                  <span>Светлая</span>
+                </button>
+                <button class="theme-option" data-theme="dark" onclick="setTheme('dark')">
+                  <div class="theme-preview dark"></div>
+                  <span>Тёмная</span>
+                </button>
+                <button class="theme-option" data-theme="auto" onclick="setTheme('auto')">
+                  <div class="theme-preview auto"></div>
+                  <span>Авто</span>
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <label class="form-label">Цветовой акцент</label>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="accent-option active" data-accent="blue" onclick="setAccent('blue')" style="--accent:#2563eb;"></button>
+                <button class="accent-option" data-accent="green" onclick="setAccent('green')" style="--accent:#16a34a;"></button>
+                <button class="accent-option" data-accent="purple" onclick="setAccent('purple')" style="--accent:#9333ea;"></button>
+                <button class="accent-option" data-accent="orange" onclick="setAccent('orange')" style="--accent:#ea580c;"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Notification Settings -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i data-lucide="bell" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+              Уведомления
+            </h3>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <label class="switch-label">
+                <span>Email-уведомления о новых заявках</span>
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-slider"></span>
+              </label>
+              <label class="switch-label">
+                <span>Push-уведомления в браузере</span>
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-slider"></span>
+              </label>
+              <label class="switch-label">
+                <span>Уведомления об изменении статуса</span>
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-slider"></span>
+              </label>
+              <label class="switch-label">
+                <span>Ежедневный дайджест</span>
+                <input type="checkbox" class="switch-input">
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Interface Settings -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i data-lucide="layout" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+              Интерфейс
+            </h3>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">Язык интерфейса</label>
+                <select class="form-select">
+                  <option value="ru" selected>Русский</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Формат даты</label>
+                <select class="form-select">
+                  <option value="dd.mm.yyyy" selected>ДД.ММ.ГГГГ</option>
+                  <option value="yyyy-mm-dd">ГГГГ-ММ-ДД</option>
+                  <option value="mm/dd/yyyy">ММ/ДД/ГГГГ</option>
+                </select>
+              </div>
+              <label class="switch-label">
+                <span>Компактный режим списков</span>
+                <input type="checkbox" class="switch-input">
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Data Settings -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i data-lucide="database" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+              Данные
+            </h3>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                  <div style="font-weight:500;">Локальное хранилище</div>
+                  <div style="font-size:0.875rem;color:var(--text-tertiary);">Занято: ~124 КБ</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="clearStorage()">
+                  <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+                  <span>Очистить</span>
+                </button>
+              </div>
+              <div style="padding-top:16px;border-top:1px solid var(--border-light);">
+                <button class="btn btn-secondary w-full">
+                  <i data-lucide="download" style="width:18px;height:18px;"></i>
+                  <span>Экспортировать данные</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- About Section -->
+      <div class="card" style="margin-top:24px;">
+        <div class="card-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+            <div>
+              <h3 style="font-size:1rem;font-weight:600;margin-bottom:4px;">RAODESK Service Desk</h3>
+              <p style="font-size:0.875rem;color:var(--text-tertiary);margin:0;">Версия 1.0.0 • Сборка 2026.04.02</p>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <a href="#" class="btn btn-ghost btn-sm">Документация</a>
+              <a href="#" class="btn btn-ghost btn-sm">Поддержка</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Render header
+    document.getElementById('header').innerHTML = RAODESK.render.header('settings');
+    initIcons();
+    
+    // Theme functions
+    function setTheme(theme) {
+      localStorage.setItem('raodesk_theme', theme);
+      applyTheme(theme);
+      
+      // Update active state
+      document.querySelectorAll('.theme-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+      });
+    }
+    
+    function setAccent(color) {
+      localStorage.setItem('raodesk_accent', color);
+      applyAccent(color);
+      
+      // Update active state
+      document.querySelectorAll('.accent-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.accent === color);
+      });
+    }
+    
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      if (theme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+      } else if (theme === 'light') {
+        html.classList.add('light');
+        html.classList.remove('dark');
+      } else {
+        // Auto - check system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          html.classList.add('dark');
+          html.classList.remove('light');
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+        }
+      }
+    }
+    
+    function applyAccent(color) {
+      const root = document.documentElement;
+      const colors = {
+        blue: { primary: '#2563eb', primaryLight: '#dbeafe', primaryDark: '#1e40af' },
+        green: { primary: '#16a34a', primaryLight: '#dcfce7', primaryDark: '#166534' },
+        purple: { primary: '#9333ea', primaryLight: '#f3e8ff', primaryDark: '#6b21a8' },
+        orange: { primary: '#ea580c', primaryLight: '#ffedd5', primaryDark: '#9a3412' }
+      };
+      
+      const c = colors[color] || colors.blue;
+      root.style.setProperty('--primary-500', c.primary);
+      root.style.setProperty('--primary-50', c.primaryLight);
+      root.style.setProperty('--primary-700', c.primaryDark);
+      root.style.setProperty('--primary-600', c.primary);
+    }
+    
+    function clearStorage() {
+      if (confirm('Очистить все локальные данные? Это действие нельзя отменить.')) {
+        localStorage.removeItem('raodesk_tickets');
+        alert('Данные очищены. Страница будет перезагружена.');
+        location.reload();
+      }
+    }
+    
+    // Load saved settings
+    const savedTheme = localStorage.getItem('raodesk_theme') || 'light';
+    const savedAccent = localStorage.getItem('raodesk_accent') || 'blue';
+    
+    setTheme(savedTheme);
+    setAccent(savedAccent);
+    
+    lucide.createIcons();
+  </script>
+  
+  <style>
+    .theme-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      min-width: 80px;
+    }
+    
+    .theme-option:hover {
+      border-color: var(--primary-300);
+    }
+    
+    .theme-option.active {
+      border-color: var(--primary-500);
+      background: var(--primary-50);
+    }
+    
+    .theme-preview {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+    
+    .theme-preview.light {
+      background: linear-gradient(135deg, #ffffff 50%, #f8fafc 50%);
+    }
+    
+    .theme-preview.dark {
+      background: linear-gradient(135deg, #0f172a 50%, #1e293b 50%);
+    }
+    
+    .theme-preview.auto {
+      background: linear-gradient(135deg, #ffffff 50%, #0f172a 50%);
+    }
+    
+    .theme-option span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    
+    .accent-option {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      border: 3px solid transparent;
+      background: var(--accent);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .accent-option:hover {
+      transform: scale(1.1);
+    }
+    
+    .accent-option.active {
+      border-color: var(--text-primary);
+      box-shadow: 0 0 0 3px var(--primary-200);
+    }
+    
+    /* Toggle Switch */
+    .switch-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    
+    .switch-input {
+      display: none;
+    }
+    
+    .switch-slider {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      background: var(--gray-300);
+      border-radius: var(--radius-full);
+      transition: background var(--transition-fast);
+      flex-shrink: 0;
+    }
+    
+    .switch-slider::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: var(--radius-full);
+      transition: transform var(--transition-fast);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .switch-input:checked + .switch-slider {
+      background: var(--primary-500);
+    }
+    
+    .switch-input:checked + .switch-slider::after {
+      transform: translateX(22px);
+    }
+  </style>
+</body>
+</html>

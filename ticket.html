@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявка — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .ticket-detail-header {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+    .ticket-detail-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+    .ticket-detail-meta {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-4);
+    }
+    .ticket-detail-description {
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+    .ticket-actions {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .comments-section {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+    }
+    .comment-item {
+      display: flex;
+      gap: var(--space-3);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+    .comment-content {
+      flex: 1;
+    }
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
+    }
+    .comment-author {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .comment-role {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+    .comment-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+    .comment-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .timeline-section {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+    }
+    .timeline-item {
+      display: flex;
+      gap: var(--space-3);
+      padding: var(--space-2) 0;
+    }
+    .timeline-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary-500);
+      border-radius: var(--radius-full);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    .timeline-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .comment-form {
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    @media (max-width: 900px) {
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <!-- Back link -->
+      <div style="margin-bottom: var(--space-4);">
+        <a href="tickets.html" class="btn btn-ghost btn-sm">
+          <i data-lucide="arrow-left" style="width:16px;height:16px;"></i>
+          <span>Вернуться к списку</span>
+        </a>
+      </div>
+      
+      <!-- Ticket Header -->
+      <div class="ticket-detail-header" id="ticketHeader">
+        <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3);">
+          <span id="ticketId" class="badge badge-neutral"></span>
+          <span id="ticketType" class="badge badge-primary"></span>
+          <span id="ticketPriority" class="badge"></span>
+          <span id="ticketStatus" class="badge"></span>
+        </div>
+        <h1 id="ticketTitle" class="ticket-detail-title"></h1>
+        <div class="ticket-detail-meta">
+          <span><i data-lucide="user" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> <span id="ticketRequester"></span></span>
+          <span><i data-lucide="map-pin" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> <span id="ticketAddress"></span></span>
+          <span><i data-lucide="clock" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> <span id="ticketCreated"></span></span>
+          <span><i data-lucide="inbox" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> <span id="ticketSource"></span></span>
+        </div>
+        <div class="ticket-detail-description">
+          <p id="ticketDescription" style="margin:0;"></p>
+        </div>
+        
+        <!-- Actions -->
+        <div class="ticket-actions">
+          <div class="form-group" style="margin:0;flex:1;min-width:200px;">
+            <label class="form-label">Исполнитель</label>
+            <select id="assigneeSelect" class="form-select">
+              <option value="Анна Власова">Анна Власова</option>
+              <option value="Ольга Романова">Ольга Романова</option>
+              <option value="Иван Петров">Иван Петров</option>
+              <option value="Андрей Смирнов">Андрей Смирнов</option>
+              <option value="Подрядчик ЛифтСервис">Подрядчик ЛифтСервис</option>
+              <option value="Аварийная бригада">Аварийная бригада</option>
+              <option value="Клининг 1">Клининг 1</option>
+              <option value="Клининг 3">Клининг 3</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0;flex:1;min-width:200px;">
+            <label class="form-label">Статус</label>
+            <select id="statusSelect" class="form-select">
+              <option value="Новая">Новая</option>
+              <option value="Назначена">Назначена</option>
+              <option value="В работе">В работе</option>
+              <option value="На уточнении">На уточнении</option>
+              <option value="На контроле">На контроле</option>
+              <option value="Закрыта">Закрыта</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:var(--space-2);">
+            <button class="btn btn-primary" id="saveBtn">
+              <i data-lucide="save" style="width:18px;height:18px;"></i>
+              <span>Сохранить</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Two Column Layout -->
+      <div class="two-column">
+        <!-- Comments Section -->
+        <div class="comments-section">
+          <h3 style="font-size:1.125rem;font-weight:600;margin-bottom:var(--space-4);">
+            <i data-lucide="message-square" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+            Комментарии
+          </h3>
+          <div id="commentsList"></div>
+          
+          <!-- Add Comment Form -->
+          <div class="comment-form">
+            <h4 style="font-size:0.9375rem;font-weight:600;margin-bottom:var(--space-3);">Добавить комментарий</h4>
+            <div class="form-group">
+              <textarea id="commentText" class="form-textarea" rows="3" placeholder="Введите текст комментария..."></textarea>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);">
+              <div style="display:flex;align-items:center;gap:var(--space-3);">
+                <label style="display:flex;align-items:center;gap:var(--space-2);font-size:0.875rem;cursor:pointer;">
+                  <input type="radio" name="visibility" value="internal" checked style="width:16px;height:16px;">
+                  <span>Внутренний</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:var(--space-2);font-size:0.875rem;cursor:pointer;">
+                  <input type="radio" name="visibility" value="public" style="width:16px;height:16px;">
+                  <span>Публичный</span>
+                </label>
+              </div>
+              <button class="btn btn-primary" id="addCommentBtn">
+                <i data-lucide="send" style="width:18px;height:18px;"></i>
+                <span>Отправить</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Timeline Section -->
+        <div class="timeline-section">
+          <h3 style="font-size:1.125rem;font-weight:600;margin-bottom:var(--space-4);">
+            <i data-lucide="clock" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>
+            История изменений
+          </h3>
+          <div id="timelineList"></div>
+          
+          <!-- SLA Info -->
+          <div style="margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--border-light);">
+            <h4 style="font-size:0.9375rem;font-weight:600;margin-bottom:var(--space-3);">SLA</h4>
+            <div style="display:grid;gap:var(--space-3);">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:0.875rem;color:var(--text-secondary);">Первый ответ</span>
+                <span id="slaFirst" class="badge"></span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:0.875rem;color:var(--text-secondary);">Время решения</span>
+                <span id="slaResolution" class="badge"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Get ticket ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const ticketId = urlParams.get('id');
+    
+    if (!ticketId) {
+      window.location.href = 'tickets.html';
+    }
+    
+    // Get ticket data
+    let ticket = RAODESK.tickets.getById(ticketId);
+    if (!ticket) {
+      alert('Заявка не найдена');
+      window.location.href = 'tickets.html';
+    }
+    
+    // Render header
+    document.getElementById('header').innerHTML = RAODESK.render.header('tickets');
+    initIcons();
+    
+    // Render ticket details
+    function renderTicket() {
+      document.getElementById('ticketId').textContent = ticket.id;
+      document.getElementById('ticketType').textContent = ticket.type;
+      document.getElementById('ticketPriority').textContent = ticket.priority;
+      document.getElementById('ticketPriority').className = 'badge ' + RAODESK.helpers.getBadgeClass(ticket.priority);
+      document.getElementById('ticketStatus').textContent = ticket.status;
+      document.getElementById('ticketStatus').className = 'badge ' + RAODESK.helpers.getBadgeClass(ticket.status);
+      document.getElementById('ticketTitle').textContent = ticket.title;
+      document.getElementById('ticketRequester').textContent = ticket.requester;
+      document.getElementById('ticketAddress').textContent = ticket.address;
+      document.getElementById('ticketCreated').textContent = ticket.createdAt;
+      document.getElementById('ticketSource').textContent = ticket.source;
+      document.getElementById('ticketDescription').textContent = ticket.description;
+      
+      // Set selects
+      document.getElementById('assigneeSelect').value = ticket.assignee;
+      document.getElementById('statusSelect').value = ticket.status;
+      
+      // SLA
+      const slaFirst = document.getElementById('slaFirst');
+      slaFirst.textContent = ticket.firstResponseLeft;
+      slaFirst.className = 'badge ' + (ticket.firstResponseLeft === 'Выполнено' ? 'badge-success' : 'badge-warning');
+      
+      const slaResolution = document.getElementById('slaResolution');
+      slaResolution.textContent = ticket.resolutionLeft;
+      slaResolution.className = 'badge ' + (ticket.resolutionLeft === 'Выполнено' ? 'badge-success' : 'badge-warning');
+    }
+    
+    // Render comments
+    function renderComments() {
+      const container = document.getElementById('commentsList');
+      if (ticket.comments.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:var(--space-8);">Нет комментариев</p>';
+        return;
+      }
+      
+      container.innerHTML = ticket.comments.map(comment => `
+        <div class="comment-item">
+          <div class="comment-avatar">${comment.author.substring(0, 2).toUpperCase()}</div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">${RAODESK.helpers.escapeHtml(comment.author)}</span>
+              <span class="comment-role">${RAODESK.helpers.escapeHtml(comment.role)}</span>
+              <span class="badge ${comment.visibility === 'internal' ? 'badge-warning' : 'badge-primary'}">${comment.visibility === 'internal' ? 'Внутренний' : 'Публичный'}</span>
+              <span class="comment-time">${RAODESK.helpers.escapeHtml(comment.createdAt)}</span>
+            </div>
+            <p class="comment-text">${RAODESK.helpers.escapeHtml(comment.text)}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Render timeline
+    function renderTimeline() {
+      const container = document.getElementById('timelineList');
+      container.innerHTML = ticket.timeline.map(item => `
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">${RAODESK.helpers.escapeHtml(item)}</div>
+        </div>
+      `).join('');
+    }
+    
+    // Save button
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const newAssignee = document.getElementById('assigneeSelect').value;
+      const newStatus = document.getElementById('statusSelect').value;
+      
+      let changed = false;
+      
+      if (newAssignee !== ticket.assignee) {
+        RAODESK.tickets.updateAssignee(ticketId, newAssignee);
+        changed = true;
+      }
+      
+      if (newStatus !== ticket.status) {
+        RAODESK.tickets.updateStatus(ticketId, newStatus);
+        changed = true;
+      }
+      
+      if (changed) {
+        // Reload ticket data
+        ticket = RAODESK.tickets.getById(ticketId);
+        renderTicket();
+        renderComments();
+        renderTimeline();
+        lucide.createIcons();
+        
+        // Show success
+        const btn = document.getElementById('saveBtn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="check" style="width:18px;height:18px;"></i><span>Сохранено</span>';
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-success');
+        lucide.createIcons();
+        
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('btn-success');
+          btn.classList.add('btn-primary');
+          lucide.createIcons();
+        }, 1500);
+      }
+    });
+    
+    // Add comment
+    document.getElementById('addCommentBtn').addEventListener('click', () => {
+      const text = document.getElementById('commentText').value.trim();
+      if (!text) {
+        alert('Введите текст комментария');
+        return;
+      }
+      
+      const visibility = document.querySelector('input[name="visibility"]:checked').value;
+      const user = RAODESK.auth.getCurrentUser();
+      
+      RAODESK.tickets.addComment(ticketId, {
+        author: user.name,
+        role: user.role,
+        visibility: visibility,
+        createdAt: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+        text: text
+      });
+      
+      // Reload ticket and render
+      ticket = RAODESK.tickets.getById(ticketId);
+      document.getElementById('commentText').value = '';
+      renderComments();
+      renderTimeline();
+      lucide.createIcons();
+    });
+    
+    // Initial render
+    renderTicket();
+    renderComments();
+    renderTimeline();
+    lucide.createIcons();
+  </script>
+</body>
+</html>

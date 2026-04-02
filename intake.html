@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каналы поступления — RAODESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="header"></div>
+  
+  <main class="app-main">
+    <div class="page-container">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 class="page-title">Каналы поступления</h1>
+            <p class="page-subtitle">Управление источниками обращений и регистрация заявок</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Channels Grid -->
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div class="category-icon blue">
+                <i data-lucide="phone" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h3 style="font-size:1rem;font-weight:600;">Телефон</h3>
+                <p style="font-size:0.875rem;color:var(--text-tertiary);">Оператор принимает звонок</p>
+              </div>
+            </div>
+            <p style="font-size:0.875rem;color:var(--text-secondary);">Оператор вручную заводит карточку от имени клиента. Подходит для срочных обращений.</p>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);">
+              <span class="badge badge-success">Активен</span>
+              <span class="badge badge-neutral">+12 сегодня</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div class="category-icon orange">
+                <i data-lucide="mail" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h3 style="font-size:1rem;font-weight:600;">Email</h3>
+                <p style="font-size:0.875rem;color:var(--text-tertiary);">Автоматическая регистрация</p>
+              </div>
+            </div>
+            <p style="font-size:0.875rem;color:var(--text-secondary);">Почтовый коннектор создаёт заявку автоматически на основе входящего письма.</p>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);">
+              <span class="badge badge-success">Активен</span>
+              <span class="badge badge-neutral">+5 сегодня</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div class="category-icon green">
+                <i data-lucide="globe" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h3 style="font-size:1rem;font-weight:600;">Портал</h3>
+                <p style="font-size:0.875rem;color:var(--text-tertiary);">Самообслуживание</p>
+              </div>
+            </div>
+            <p style="font-size:0.875rem;color:var(--text-secondary);">Клиент сам подаёт обращение и видит статус через личный кабинет.</p>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);">
+              <span class="badge badge-success">Активен</span>
+              <span class="badge badge-neutral">+8 сегодня</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div class="category-icon blue">
+                <i data-lucide="message-circle" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h3 style="font-size:1rem;font-weight:600;">Чат-бот</h3>
+                <p style="font-size:0.875rem;color:var(--text-tertiary);">Мессенджеры</p>
+              </div>
+            </div>
+            <p style="font-size:0.875rem;color:var(--text-secondary);">Быстрый канал для жителей через Telegram и другие мессенджеры.</p>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);">
+              <span class="badge badge-primary">В тесте</span>
+              <span class="badge badge-neutral">+3 сегодня</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div class="category-icon gray">
+                <i data-lucide="file-text" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h3 style="font-size:1rem;font-weight:600;">Форма на сайте</h3>
+                <p style="font-size:0.875rem;color:var(--text-tertiary);">Публичная форма</p>
+              </div>
+            </div>
+            <p style="font-size:0.875rem;color:var(--text-secondary);">Публичная форма для подачи сервисных заявок на сайте УК.</p>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);">
+              <span class="badge badge-warning">Настройка</span>
+              <span class="badge badge-neutral">0 сегодня</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div class="category-icon red">
+                <i data-lucide="activity" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h3 style="font-size:1rem;font-weight:600;">Мониторинг</h3>
+                <p style="font-size:0.875rem;color:var(--text-tertiary);">Авто-инциденты</p>
+              </div>
+            </div>
+            <p style="font-size:0.875rem;color:var(--text-secondary);">Автоматическая генерация инцидентов по сигналам систем мониторинга.</p>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);">
+              <span class="badge badge-neutral">Планируется</span>
+              <span class="badge badge-neutral">0 сегодня</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Registration -->
+      <div style="margin-top:32px;">
+        <h2 style="font-size:1.125rem;font-weight:600;margin-bottom:16px;">Быстрая регистрация</h2>
+        <div class="card">
+          <div class="card-body">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">Тема обращения</label>
+                <input type="text" class="form-input" placeholder="Краткое описание проблемы">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Категория</label>
+                <select class="form-select">
+                  <option value="">Выберите категорию</option>
+                  <option value="Авария / протечка">Авария / протечка</option>
+                  <option value="Кровля">Кровля</option>
+                  <option value="Электрика">Электрика</option>
+                  <option value="Сантехника">Сантехника</option>
+                  <option value="Лифтовое хозяйство">Лифтовое хозяйство</option>
+                  <option value="Клининг">Клининг</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">Заявитель</label>
+                <input type="text" class="form-input" placeholder="ФИО или название организации">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Адрес</label>
+                <input type="text" class="form-input" placeholder="Адрес объекта">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Описание</label>
+              <textarea class="form-textarea" rows="3" placeholder="Подробное описание проблемы..."></textarea>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;">
+              <button class="btn btn-secondary">Сохранить черновик</button>
+              <button class="btn btn-primary">Зарегистрировать заявку</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Check auth
+    if (!RAODESK.auth.checkAuth()) {
+      window.location.href = 'index.html';
+    }
+    
+    // Render header
+    document.getElementById('header').innerHTML = RAODESK.render.header('intake');
+    initIcons();
+    
+    // Init icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
